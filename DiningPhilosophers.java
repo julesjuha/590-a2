@@ -59,7 +59,7 @@ public class DiningPhilosophers {
                 pickUp(left);
             }
 
-            System.out.println(id + " is eating");
+            System.out.println(id + " is eating nom nom");
             TimeUnit.MILLISECONDS.sleep(800);
 
             putDown(right);
