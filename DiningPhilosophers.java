@@ -53,12 +53,10 @@ public class DiningPhilosophers {
 
             if (id % 2 == 0) {
                 pickUp(left);
-                pickUp(right);
-                System.out.println(id + " picked up forks " + left + ", " + right);
+                pickUp(right); 
             } else {
                 pickUp(right);
                 pickUp(left);
-                System.out.println(id + " picked up forks " + left + ", " + right);
             }
 
             System.out.println(id + " is eating");
@@ -66,17 +64,18 @@ public class DiningPhilosophers {
 
             putDown(right);
             putDown(left);
-            System.out.println(id + " put down forks " + left + ", " + right);
             
             System.out.println(id + " finished eating");
         }
 
         private void pickUp(int fork) throws InterruptedException {
             forks[fork].acquire();
+            System.out.println(id + " picked up fork " + fork);
         }
 
         private void putDown(int fork) {
             forks[fork].release();
+            System.out.println(id + " put down fork " + fork);
         }
     }
 }
