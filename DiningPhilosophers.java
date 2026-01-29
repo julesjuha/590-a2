@@ -8,16 +8,15 @@ import java.util.concurrent.TimeUnit;
 public class DiningPhilosophers {
 
     private static final int N = 5;
-    private static final Semaphore[] chopsticks = new Semaphore[N];
+    private static final Semaphore[] forks = new Semaphore[N];
 
     public static void main(String[] args) {
         for (int i = 0; i < N; i++) {
-            // Fair semaphores prevent starvation
-            chopsticks[i] = new Semaphore(1, true);
+            forks[i] = new Semaphore(1, true);
         }
 
         for (int i = 0; i < N; i++) {
-            new Thread(new Philosopher(i), "Philosopher-" + i).start();
+            new Thread(new Philosopher(i)).start();
         }
     }
 
@@ -50,32 +49,34 @@ public class DiningPhilosophers {
         }
 
         private void eat() throws InterruptedException {
-            System.out.println(id + " wants to eat");
+            System.out.println(id + " trying to eat");
 
-            // Break symmetry to avoid deadlock
             if (id % 2 == 0) {
-                pickUp(left, "left");
-                pickUp(right, "right");
+                pickUp(left);
+                pickUp(right);
+                System.out.println(id + " picked up forks " + left + ", " + right);
             } else {
-                pickUp(right, "right");
-                pickUp(left, "left");
+                pickUp(right);
+                pickUp(left);
+                System.out.println(id + " picked up forks " + left + ", " + right);
             }
 
             System.out.println(id + " is eating");
             TimeUnit.MILLISECONDS.sleep(800);
 
-            putDown(left);
             putDown(right);
+            putDown(left);
+            System.out.println(id + " put down forks " + left + ", " + right);
+            
             System.out.println(id + " finished eating");
         }
 
-        private void pickUp(int chopstickId, String side) throws InterruptedException {
-            chopsticks[chopstickId].acquire();
-            System.out.println(id + " picked up " + side + " chopstick");
+        private void pickUp(int fork) throws InterruptedException {
+            forks[fork].acquire();
         }
 
-        private void putDown(int chopstickId) {
-            chopsticks[chopstickId].release();
+        private void putDown(int fork) {
+            forks[fork].release();
         }
     }
 }
